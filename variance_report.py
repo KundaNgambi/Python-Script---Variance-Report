@@ -34,8 +34,6 @@ for row in data:
     elif row['Actual Amount (ZMW)'] < row['Budgeted Amount (ZMW)']:
         row['Status'] = 'Favourable'
 
-
-
 for row in data:
     if abs(row['Variance %']) >= THRESHOLD:
         row['Flag'] = '*'
