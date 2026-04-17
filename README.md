@@ -24,11 +24,17 @@ The script has four phases. First, it reads a CSV using csv.DictReader — I use
 
 ###### \- Example:
 
+
+
+###### ```
+
 ###### &#x20;   Category,Budgeted Amount (ZMW),Actual Amount (ZMW)
 
 ###### &#x20;   Potato Seed,1200,1200
 
 ###### &#x20;   Pesticide,200,220
+
+###### ```
 
 ###### 
 
@@ -40,9 +46,11 @@ The script has four phases. First, it reads a CSV using csv.DictReader — I use
 
 ###### \## Output
 
+###### 
 
-==================================================================================================
----
+###### ```
+
+###### ==================================================================================================
 
 ###### VARIANCE REPORT — Zamviazi Period 1 (Feb–May 2025)
 
@@ -76,9 +84,45 @@ The script has four phases. First, it reads a CSV using csv.DictReader — I use
 
 ###### Miracle                                           0        460        460       inf% Unbudgeted \*
 
-###### Transport Mazabuka (Load)                         0        125        125       inf% Unbudgeted
+###### Transport Mazabuka (Load)                         0        125        125       inf% Unbudgeted \*
 
+###### Transport Chikankata (Load)                       0        125        125       inf% Unbudgeted \*
 
+###### Empty Bags                                       90         90          0       0.0% On Budget   
+
+###### Transport Chikankata - Mazabuka (Person)        150        150          0       0.0% On Budget   
+
+###### Transport Chikankata - Mazabuka (Load)        1,350      1,350          0       0.0% On Budget   
+
+###### Ploughing - During Harvest                      200        200          0       0.0% On Budget   
+
+###### Labour - During Harvest                         200        200          0       0.0% On Budget   
+
+###### Council Levy                                    100        100          0       0.0% On Budget   
+
+###### Deport Fees                                     300        300          0       0.0% On Budget   
+
+###### Extra Hand Labourer                             500        500          0       0.0% On Budget   
+
+###### Food - During Sales                             200        250         50      25.0% Adverse    \*
+
+###### Transaction Charges - Bank                       30         30          0       0.0% On Budget   
+
+###### Transaction Charges - Withdraw                   55         55          0       0.0% On Budget   
+
+###### \--------------------------------------------------------------------------------------------------
+
+###### TOTALS                                       14,175     15,262      1,087       7.7% Adverse   
+
+###### ==================================================================================================
+
+###### 8 of 25 categories have material variances (>10% threshold)
+
+###### ==================================================================================================
+
+```
+
+---
 
 
 
@@ -86,41 +130,41 @@ The script has four phases. First, it reads a CSV using csv.DictReader — I use
 
 ###### \### BOM handling
 
-###### i used utf-8-sig because excel adds a bom to utf-8 csv that breaks the first column key
+###### I used UTF-8-sig because Excel adds a BOM to UTF-8 CSV that breaks the first column key.
 
 
 
 ###### \### Zero-budget items (float('inf'))
 
-###### This was done in order to preserve numeric consistency across the script
+###### When an item has zero budget but non-zero actual spend, the percentage variance is mathematically undefined (division by zero). Storing float('inf') preserves the numeric type of the column so downstream operations don't break on mixed string/number data. These rows are flagged as 'Unbudgeted' in the Status column for clarity.
 
 
 
 ###### \### Four-way status classification
 
-###### This included the On budget, unbudgeted, favourable and adverse variances when variances were being calculated in order to account for all cases. From items without a budgeted amount, items where the budgeted and actual were the same, ones were the budgeted was greater than the actual and ones were the actual was greater than the budgeted.
+###### Covers four scenarios: items with no budget (Unbudgeted), items where actual equals budget (On Budget), items where actual is less than budget (Favourable), and items where actual exceeds budget (Adverse).
 
-
+###### 
 
 ###### \### Weighted variance percentage
 
-###### total variance over total budget — because summing individual percentages across different bases is mathematically meaningless
+###### Total variance over total budget. Summing individual percentages across different bases would be mathematically meaningless — a 10% variance on a 3,600 ZMW item is not equivalent to a 10% variance on a 30 ZMW item.
 
-
+###### 
 
 ###### \### Material threshold (10%)
 
-###### Used to flag any variances that meet or exceed the threshold
+###### The threshold is currently hardcoded as 10 but designed as a constant (THRESHOLD) so it can be changed in one place. It's an absolute-value comparison, so both 15% over-budget and 15% under-budget trigger the flag.
 
 
 
 ###### \## Known Limitations
 
-###### \- Hardcoded input filename (see stretch goals)
+* ###### No command-line arguments (filename and threshold are hardcoded).
+* ###### No output-to-file capability yet (report prints to terminal only).
+* ###### No multi-period comparison.
 
-###### \- no error handling
 
-###### 
 
 ###### \## Author
 
