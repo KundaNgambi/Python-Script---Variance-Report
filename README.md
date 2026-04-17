@@ -175,4 +175,3 @@ The script has four phases. First, it reads a CSV using csv.DictReader — I use
 ###### \## Version History
 
 ###### \- 0.1 — Initial working version: CSV ingestion, variance calculation, formatted output
-
