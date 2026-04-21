@@ -84,7 +84,7 @@ No output-to-file capability yet (report prints to terminal only).
 No multi-period comparison.
 
 ## Author
-Kunda Ng'ambi
+Kunda Ng'ambi 
 
 ## Version History
 - 0.1 — Initial working version: CSV ingestion, variance calculation, formatted output
